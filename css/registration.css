@@ -1,25 +1,28 @@
+#container {
+	height: 800px;
+	width: 1000px;
+	background-color: #EEE;
+}
+
 .courses {
 	background-color: #FFF
 }
 
-table.nav {
+#timetable {
+	float: left;
 	text-align: center;
 	border-collapse: collapse;
-	width: 100%;
+	width: 80%;
 }
 
 td {
 	border: 1px solid black;
 	margin: 0px;
 	border-spacing: 0px;
-	height: 50px;
+	height: 30px;
 	border-radius: 3px;
 }
 
 tr {
 	padding: 0px;
-}
-
-td.noLeft {
-	height:500px;
 }
