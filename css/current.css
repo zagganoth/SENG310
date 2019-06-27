@@ -1,0 +1,26 @@
+#container {
+	height: 800px;
+	width: 1000px;
+	background-color: #EEE;
+}
+
+.courses {
+	background-color: #FFF
+}
+
+#timetable {
+	text-align: center;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+td {
+	border: 1px solid black;
+	margin: 0px;
+	border-spacing: 0px;
+	border-radius: 3px;
+}
+
+tr {
+	padding: 0px;
+}
