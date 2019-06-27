@@ -118,6 +118,7 @@ function createCourseTable(names,courses,termName)
     tableHTML += "<table><th>Selected Courses</th></tr><tr><td rowspan = 30 style='vertical-align:top; float:left; width:100%; height:500px;'><div id='courseOptions_" + termName + "'><input style='margin:10px;border:1px solid black' placeholder='Search' onclick='showCourses(\"" + termName + "\"," + JSON.stringify(courses) + ")'></input></div></td></tr></table>";
     return tableHTML;
 }
+
 function showCourses(term,courses) {
     if (!tab1CoursesShown)
     {
@@ -137,6 +138,22 @@ function showCourses(term,courses) {
     }
 
 }
+
+//This creates the HTML to fill in the right sidebar with the details of the courses that have been selected, given this list of courses.
+function createSelectedCoursesSidebar (selectedCourses) {
+	var sidebarHTML = "<table id='sidebar'><form>"
+	for(var i in selectedCourses) {
+		sidebarHTML += "<tr>";
+		for (var property in courses[i]) {
+			if(courses[i].hasOwnProperty(property)) {
+				sidebarHTML += "<td><input type='radio'></td>" + "<td>" + courses[i][property] + "</td>";
+			}
+		}
+		sidebarHTML += "</tr>";
+	}
+	return sidebarHTML + "</form></table>";
+}
+
 function convertDurationToTimePeriod(duration)
 {
 	dur = duration.split('-');
