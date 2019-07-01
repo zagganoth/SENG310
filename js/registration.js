@@ -11,19 +11,59 @@ $(function () {
     tab1Table = createCourseTable(term1courses,"Term1");
     tab2Table = createCourseTable(term2courses, "Term2");
     tabEmptyTable = createCourseTable([], "Term1");
-
 	$('#tabs-1').prepend(tabEmptyTable);
 	$('#tabs-2').prepend(tab2Table);
-    $('#tabs-3').prepend(tab1Table);
-    
+	$('#tabs-3').prepend(tab1Table);
+	//List of the CourseSection objects that make up the current timetable
+	var currentSections = [];
+	//List of the names of the classes currently selected
+	var currentClasses = [];
+	
+	//Trigger this function if a course from the courses dropdown menu is selected
     $('body').on('click','.addCourse',function (event) {
-        console.log(event.target.innerText)
-        console.log(courses[event.target.innerText]);
+		var courseFromSave = courses[$(event.target).find('.courseName').prevObject.text()]
+		if(courseFromSave.recommendationLevel == 2)
+		{
+			courseFromSave = courseFromSave.sections[0];
+			courseFromSave["name"] = event.target.innerText;
+			currentClasses.push(event.target.innerText);
+			var course = new CourseSection(courseFromSave.name, courseFromSave.section, courseFromSave.prof, courseFromSave.duration, courseFromSave.days, courseFromSave.registered,courseFromSave.recommendationLevel);
+			currentSections.push(course);
+			tabTable = createCourseTable(currentSections, "Term1");
+			
+			$('#tabs-1').html(tabTable);
+			document.getElementById('selectedCourses').innerHTML += createSelectedCoursesSidebar(currentClasses);
+			tab1CoursesShown = false;
+		}
     })
+	$('body').on('click','input:radio',function(event)
+	{
+		//Get the TR containing the radio button
+		var parentRow = $(event.target).parent().parent();
+		var sectionName = $(parentRow).find('.sectionName').text();
+		var courseName = $(parentRow).parent().find('.courseName').text();
+		var sectionReg = /A0([0-9])/;
+		var sectionNum = sectionReg.exec(sectionName)[1]-1;
 
+		for(var index in currentSections)
+		{
+			if(currentSections[index].name == courseName)
+			{
+				var courseFromSave = courses[courseName].sections[sectionNum];
+				courseFromSave["name"] = courseName;
+				var course = new CourseSection(courseFromSave.name, courseFromSave.section, courseFromSave.prof, courseFromSave.duration, courseFromSave.days, courseFromSave.registered,courseFromSave.recommendationLevel);
+				currentSections[index] = course;
+				break;
+			}
+		}
+		tabTable = createCourseTable(currentSections, "Term1");
+		$('#tabs-1').html(tabTable);
+		document.getElementById('selectedCourses').innerHTML += createSelectedCoursesSidebar(currentClasses);
+	})
 }
 );
 tab1CoursesShown = false;
+tab1CoursesHidden = false;
 class Course
 {
 
@@ -34,9 +74,9 @@ class Course
 }
 class CourseSection 
 {
-	constructor(name,sectionNumber,prof,duration,days,registered=false) {
+	constructor(name,sectionNumber,prof,duration,days,registered=false,recommendationLevel=0) {
 		this.name = name;
-		this.sectionNumber = sectionNumber;
+		this.section = sectionNumber;
 		this.prof = prof;
 		this.timePeriod = duration;
 		var timePeriod = convertDurationToTimePeriod(duration);
@@ -44,13 +84,11 @@ class CourseSection
 		this.endTime = timePeriod[1];
 		this.days = daysToArray(days);
 		this.registered = registered;
+		this.recommendationLevel = this.recommendationLevel;
 	}
 }
-function createSuggestionsDiv()
-{
 
-}
-function createCourseTable(names,courses,termName)
+function createCourseTable(courses,termName)
 {
 	//Base HTML for table
 	var tableHTML = `
@@ -64,11 +102,12 @@ function createCourseTable(names,courses,termName)
 				<th>Friday</th>
 			</tr>
 	`;
-    if (courses.length == 0) {
-        console.log("Hi");
+	if (courses.length == 0) 
+	{
         tableHTML += "<tr><td colspan=6 style='height:500px'>Add some courses to begin</td></tr>";
     }
-    else {
+	else 
+	{
         //Find the first and last half-hours that will have classes in them.
         var first = 100;
         var last = -1;
@@ -110,49 +149,104 @@ function createCourseTable(names,courses,termName)
 
 
             tableHTML += "</tr>";
-        }
-        tableHTML += "</table>";
+		}
+
         //This is the "Selected Courses Shown Here" area, all made into one cell. We can add logic to display courses in here.
         
-    }
-    tableHTML += "<table><th>Selected Courses</th></tr><tr><td rowspan = 30 style='vertical-align:top; float:left; width:100%; height:500px;'><div id='courseOptions_" + termName + "'><input style='margin:10px;border:1px solid black' placeholder='Search' onclick='showCourses(\"" + termName + "\"," + JSON.stringify(courses) + ")'></input></div></td></tr></table>";
+	}
+	tableHTML += `<tr>
+						<td class='fakeButton' colspan=2>
+							Save
+						</td>
+						<td class='fakeButton' colspan=2>
+							Auto-Generate
+						</td>
+						<td class='fakeButton' colspan=2>
+							Register
+						</td>
+				  </tr>`;
+	tableHTML += "</table>";
+    tableHTML += `<table width='250px'>
+                    <tr>
+                        <th>Selected Courses</th>
+                    </tr>
+                    <tr>
+                        <td rowspan = 30 id='selectedCourses' style='vertical-align:top; float:left; width:100%; height:500px;'>
+                            <div id='courseOptions_` + termName + `'>
+                                <input class='termSearch' style='margin-top:5px;border-radius:9px;width:100%;border:1px solid grey;padding:2px' placeholder='Search' onclick='showCourses("` + termName + `",` + JSON.stringify(courses) + `)'></input>
+                            </div>
+                        </td>
+                    </tr>
+				  </table>`;
     return tableHTML;
 }
-
-function showCourses(term,courses) {
+function showCourses(term,selectedCourses) {
     if (!tab1CoursesShown)
     {
-        console.log(term);
-        console.log(courses);
-        var divHTML = `<table>
-                        <tr>
-                            <td class='addCourse `+term+`'>CSC 226</td>
-                        </tr>
-                        <tr>
-                            <td class='addCourse `+ term +`'>SENG 310</td>
-                        </tr>
-                      </table>`;
+        var divHTML = `<table style='width:100%;border-collapse:collapse;' id='term1Courses'>`;
+        for(courseIndex in courses)
+        {
+            var toAdd = true;
+            for (index in selectedCourses) {
+                if (selectedCourses[index]["name"] == courseIndex)
+                    toAdd = false;
+            }
+            if(toAdd)
+                divHTML += "<tr><td class='addCourse " + term + " " + getClassForRecLevel(courses[courseIndex]["recommendationLevel"])+"'><div class='courseName'>" + courseIndex + "</div></td></tr>";
+        }
+        divHTML += "</table>";
         $('#courseOptions_' + term).append(divHTML);;
-        console.log(document.getElementById("courseOptions_" + term).innerHTML);
-        tab1CoursesShown = true;
-    }
+		yellowCourses = document.getElementsByClassName('yellowCourse');
+		for(index in yellowCourses)
+		{
 
-}
-
-//This creates the HTML to fill in the right sidebar with the details of the courses that have been selected, given this list of courses.
-function createSelectedCoursesSidebar (selectedCourses) {
-	var sidebarHTML = "<table id='sidebar'><form>"
-	for(var i in selectedCourses) {
-		sidebarHTML += "<tr>";
-		for (var property in courses[i]) {
-			if(courses[i].hasOwnProperty(property)) {
-				sidebarHTML += "<td><input type='radio'></td>" + "<td>" + courses[i][property] + "</td>";
-			}
+			yellowCourses[index].innerHTML += `<div class='reqInfo'>Co-Requisites Missing</div>`;
 		}
-		sidebarHTML += "</tr>";
+		redCourses = document.getElementsByClassName('redCourse');
+		for(index in redCourses)
+		{
+
+			redCourses[index].innerHTML += `<div class='reqInfo'>Pre-Requisites Missing</div>`;
+		}
+        tab1CoursesShown = true;
 	}
-	return sidebarHTML + "</form></table>";
 }
+function getClassForRecLevel(recLevel)
+{
+	switch(recLevel)
+	{
+		case 0:
+			return "redCourse";
+		case 1:
+			return "yellowCourse";
+		case 2:
+			return "greenCourse";
+		default:
+			return "redCourse";
+	}
+}
+//This creates the HTML to fill in the right sidebar with the details of the courses that have been selected, given this list of courses.
+function createSelectedCoursesSidebar (selectedCourses)
+{
+	var sidebarHTML = ``;
+	for(var i in selectedCourses) {
+		var sections = courses[selectedCourses[i]]["sections"];
+		sidebarHTML += "<table>";
+		sidebarHTML += "<tr><th colspan=3 class='courseName'>"+selectedCourses[i]+"</th></tr>";
+		for(var index in sections)
+		{
+			sidebarHTML += "<tr>";
+			sidebarHTML += "<td class='noBorder' style='width:3%'><input type='radio' name='sections_"+selectedCourses[i].replace(/\s/g, '')+"'></td>" + "<td class='noBorder sectionName'>" + sections[index]["section"] + "</td>";
+			sidebarHTML += "<td class='noBorder'>"+sections[index]["prof"]+"</td>";
+			sidebarHTML += "<td class='noBorder'>"+sections[index]["duration"]+"</td>";
+			sidebarHTML += "<td class='noBorder'>"+sections[index]["days"]+"</td>";
+			sidebarHTML += "</tr>";
+		}
+		sidebarHTML += "</table>";
+	}
+	return sidebarHTML + "";
+}
+
 
 function convertDurationToTimePeriod(duration)
 {
@@ -167,6 +261,7 @@ function convertDurationToTimePeriod(duration)
 	endTime = (end[1]-8)*2 + (end[2]==="20" ? 1 : 2);
 	return [startTime,endTime];
 }
+
 
 function daysToArray(days) {
 	var array = days.split('');
