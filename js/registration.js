@@ -202,7 +202,7 @@ function createCourseTable(classes,termName)
 }
 function createCourseOptionsTable(courses,termName)
 {
-    return  `<table width='250px'>
+    return  `<table width='30%'>
                     <tr>
                         <th>Selected Courses</th>
                     </tr>
@@ -249,6 +249,8 @@ function showCourses(term,selectedCourses) {
         tab1CoursesShown = true;
 	}
 }
+
+// Used by showCourses() to colour "search results" based on pre- and co-requisites.
 function getClassForRecLevel(recLevel)
 {
 	switch(recLevel)
@@ -263,7 +265,8 @@ function getClassForRecLevel(recLevel)
 			return "redCourse";
 	}
 }
-//This creates the HTML to fill in the right sidebar with the details of the courses that have been selected, given this list of courses.
+
+// This creates the HTML to fill in the right sidebar with the details of the courses that have been selected, given this list of courses.
 function createSelectedCoursesSidebar (selectedCourses)
 {
 	var sidebarHTML = ``;
