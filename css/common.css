@@ -25,14 +25,17 @@ td {
 	border-spacing: 0px;
 	height: 30px;
 }
+
 td.noBorder
 {
 	border: 0px;
 }
-.addCourse{
+
+.addCourse {
 	cursor: pointer;
-	position:relative;
+	position: relative;
 }
+
 tr {
 	padding: 0px;
 }
@@ -62,7 +65,7 @@ tr {
 .fakeButton
 {
 	cursor:pointer;
-	background-color:grey
+	background-color:grey;
 }
 
 .myPage
@@ -85,4 +88,21 @@ tr {
 	padding: 0px 6px 0px 4px;
 	text-align: left;
 	text-decoration: none;
+}
+
+/* This is necessary to prevent "Pre-Requisite Missing" overlapping with the help buttons. */
+.searchRow {
+	height: 35px;
+}
+
+.courseName {
+	display: inline;
+}
+
+.helpButton
+{
+	border-radius: 20px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
 }

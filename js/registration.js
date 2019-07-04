@@ -180,6 +180,8 @@ function createCourseTable(courses,termName)
 				  </table>`;
     return tableHTML;
 }
+
+// Generates the list of courses that can be added when the cursor is in the search field.
 function showCourses(term,selectedCourses) {
     if (!tab1CoursesShown)
     {
@@ -191,8 +193,9 @@ function showCourses(term,selectedCourses) {
                 if (selectedCourses[index]["name"] == courseIndex)
                     toAdd = false;
             }
-            if(toAdd)
-                divHTML += "<tr><td class='addCourse " + term + " " + getClassForRecLevel(courses[courseIndex]["recommendationLevel"])+"'><div class='courseName'>" + courseIndex + "</div></td></tr>";
+            if(toAdd) {
+                divHTML += "<tr class='searchRow'><td class='addCourse " + term + " " + getClassForRecLevel(courses[courseIndex]["recommendationLevel"])+"'><div class='courseName'>" + courseIndex + "</div><button class='helpButton'>?</button></td></tr>";
+			}
         }
         divHTML += "</table>";
         $('#courseOptions_' + term).append(divHTML);;
