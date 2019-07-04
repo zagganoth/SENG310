@@ -2,6 +2,9 @@
 	height: 800px;
 	width: 1200px;
 	background-color: #EEE;
+	position: absolute;
+	margin-left: 230px;
+	padding: 0px;
 }
 
 .courses {
@@ -45,6 +48,7 @@ tr {
 {
 	background-color: yellow;
 }
+
 .reqInfo
 {
 	position:absolute;
@@ -53,8 +57,31 @@ tr {
 	font-size:8pt;
 	color: #444444;
 }
+
 .fakeButton
 {
 	cursor:pointer;
 	background-color:grey
+}
+
+.myPage
+{
+	margin: 0px;
+	padding: 0px;
+}
+
+#myPageSide
+{
+	float: left;
+}
+
+.myPageLink
+{
+	border-right: 1px solid #AAA;
+	color: #369;
+	font-family: Arial, sans-serif;
+	font-size: 13px;
+	padding: 0px 6px 0px 4px;
+	text-align: left;
+	text-decoration: none;
 }
