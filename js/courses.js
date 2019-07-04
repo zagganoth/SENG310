@@ -31,7 +31,8 @@ var courses =
         "tutorials": [
 
         ],
-        "recommendationLevel": 2
+        "recommendationLevel": 2,
+		"colour": "#FFD700"
     },
     "ECE 360":
     {
@@ -66,7 +67,8 @@ var courses =
         "tutorials": [
 
         ],
-        "recommendationLevel": 2
+        "recommendationLevel": 2,
+		"colour": "#0000CD"
     },
     "SENG 365":
     {
@@ -101,7 +103,8 @@ var courses =
         "tutorials": [
 
         ],
-        "recommendationLevel": 2
+        "recommendationLevel": 2,
+		"colour": "#228B22"
     },
     "CSC 305":
     {
@@ -134,7 +137,8 @@ var courses =
         "tutorials": [
 
         ],
-        "recommendationLevel": 2
+        "recommendationLevel": 2,
+		"colour": "#FF7F50"
     },
     "SENG 310":
     {
@@ -144,7 +148,7 @@ var courses =
                 "prof": "Dr. E",
                 "duration": "15:30-16:20",
                 "days": "TWF",
-                "registered": false,
+                "registered": true,
             },
             {
                 "section": "A02",
@@ -167,7 +171,8 @@ var courses =
         "tutorials": [
 
         ],
-        "recommendationLevel": 1
+        "recommendationLevel": 1,
+		"colour": "#ADFF2F"
     },
     "ECE 310":
     {
@@ -202,6 +207,7 @@ var courses =
         "tutorials": [
 
         ],
-        "recommendationLevel": 0
+        "recommendationLevel": 0,
+		"colour": "#00CED1"
     }
 }

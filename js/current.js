@@ -1,11 +1,11 @@
 $( function() {
 	$( "#tabs" ).tabs();
 	csc = new CourseSection("CSC226","A01","Dr.A","9:30-10:20",'MWF');
-	ece310 = new CourseSection("ECE310","A01","Dr.B","10:30-11:50",'MH');
-	seng310 = new CourseSection("SENG310","A01","Dr.C","15:30-16:20",'MH',true);
-	csc2 = new CourseSection("CSC225","A02","Dr.BA","10:30-11:20",'MW');
-	ece320 = new CourseSection("ECE320","A03","Dr.BC","12:30-13:50",'MF');
-	seng320 = new CourseSection("SENG320","A01","Dr.CD","14:30-16:20",'MH');
+    ece310 = new CourseSection("ECE310", "A01", "Dr.B", "10:30-11:50", 'MH', false, "#00CED1");
+	seng310 = new CourseSection("SENG310","A01","Dr.C","15:30-16:20",'MH',true,"#ADFF2F");
+    csc2 = new CourseSection("CSC225", "A02", "Dr.BA", "10:30-11:20", 'MW', false, "#0000CD");
+    ece320 = new CourseSection("ECE320", "A03", "Dr.BC", "12:30-13:50", 'MF', false, "#FF7F50");
+    seng320 = new CourseSection("SENG320", "A01", "Dr.CD", "14:30-16:20", 'MH', false, "#FFD700");
 	term1courses = [csc,ece310,seng310];
 	term2courses = [csc2,ece320,seng320];
 	tab1Table = createCourseTable(term1courses);
@@ -17,7 +17,7 @@ $( function() {
 
 class CourseSection 
 {
-	constructor(name,sectionNumber,prof,duration,days,registered=false) {
+	constructor(name,sectionNumber,prof,duration,days,registered=false, colour="white") {
 		this.name = name;
 		this.sectionNumber = sectionNumber;
 		this.prof = prof;
@@ -26,7 +26,8 @@ class CourseSection
 		this.startTime = timePeriod[0];
 		this.endTime = timePeriod[1];
 		this.days = daysToArray(days);
-		this.registered = registered;
+        this.registered = registered;
+        this.colour = colour
 	}
 
 	toString() {
@@ -34,14 +35,14 @@ class CourseSection
 	}
 }
 
-function createCourseTable(courses)
+function createCourseTable(classes)
 {
-	//Filter out un-registered courses.
+	//Filter out un-registered classes.
 	//We have to manually increment the index, because the array loses elements as we iterate.
 	var i = 0;
-	while(i < courses.length) {
-		if(!courses[i].registered) {
-			courses.splice(i, 1);
+	while(i < classes.length) {
+		if(!classes[i].registered) {
+			classes.splice(i, 1);
 		}
 		else{
 			i++;
@@ -64,12 +65,12 @@ function createCourseTable(courses)
 	//Find the first and last half-hours that will have classes in them.
 	var first = 100;
 	var last = -1;
-	for(var i in courses) {
-		if(courses[i].startTime < first) {
-			first = courses[i].startTime;
+	for(var i in classes) {
+		if(classes[i].startTime < first) {
+			first = classes[i].startTime;
 		}
-		if(courses[i].endTime > last) {
-			last = courses[i].endTime;
+		if(classes[i].endTime > last) {
+			last = classes[i].endTime;
 		}
 	}
 	
@@ -81,25 +82,26 @@ function createCourseTable(courses)
 		var cellsChanged = false;
 		//By default assume the table row is empty
 		var cells = ["<td></td>","<td></td>","<td></td>","<td></td>",'<td></td>'];
-		for(var index in courses)
+		for(var index in classes)
 		{
 			//If a course starts at this half hour chunk, then for each day that it occurs, change the column to be that course
-			if(courses[index].startTime == halfHour)
+			if(classes[index].startTime == halfHour)
 			{
-				var rowSpan = courses[index].endTime - courses[index].startTime;
-				for(ind in courses[index].days)
+				var rowSpan = classes[index].endTime - classes[index].startTime;
+				for(ind in classes[index].days)
 				{
 					cellsChanged = true;
-					cells[courses[index].days[ind]] = "<td rowspan = " + rowSpan + (courses[index].registered ? " style='background-color:#CCC'" : '') + ">"+courses[index].name+"<br />"+courses[index].timePeriod+"</td>";
+					console.log(index + " " + classes[index].color)
+					cells[classes[index].days[ind]] = "<td rowspan = " + rowSpan + (classes[index].registered ? " style='background-color:"+classes[index].colour+"'" : '') + ">"+classes[index].name+"<br />"+classes[index].timePeriod+"</td>";
 				}
 			}
 			//If the course <td> has already been created, make sure another one isn't created in the same timeslot
-			else if(courses[index].startTime < halfHour && courses[index].endTime > halfHour)
+			else if(classes[index].startTime < halfHour && classes[index].endTime > halfHour)
 			{
-				for(ind in courses[index].days)
+				for(ind in classes[index].days)
 				{
 					cellsChanged = true;
-					cells[courses[index].days[ind]] = "";
+					cells[classes[index].days[ind]] = "";
 				}
 			}
 		}
@@ -110,7 +112,7 @@ function createCourseTable(courses)
 		tableHTML += "</tr>";
 	}
 	tableHTML += "</table>";
-	//This is the "Selected Courses Shown Here" area, all made into one cell. We can add logic to display courses in here.
+	//This is the "Selected classes Shown Here" area, all made into one cell. We can add logic to display classes in here.
 	return tableHTML;
 }
 
