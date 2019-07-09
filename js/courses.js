@@ -32,7 +32,8 @@ var courses =
 
         ],
         "recommendationLevel": 2,
-		"colour": "#FFD700"
+        "colour": "#FFD700",
+        "room": "DTB A110"
     },
     "ECE 360":
     {
@@ -68,7 +69,8 @@ var courses =
 
         ],
         "recommendationLevel": 2,
-		"colour": "#0000CD"
+        "colour": "#00ffcc",
+        "room": "HSD A240"
     },
     "SENG 365":
     {
@@ -104,7 +106,8 @@ var courses =
 
         ],
         "recommendationLevel": 2,
-		"colour": "#228B22"
+        "colour": "#228B22",
+        "room": "ELL 168"
     },
     "CSC 305":
     {
@@ -138,7 +141,8 @@ var courses =
 
         ],
         "recommendationLevel": 2,
-		"colour": "#FF7F50"
+        "colour": "#FF7F50",
+        "room": "ECS 123"
     },
     "SENG 310":
     {
@@ -172,7 +176,8 @@ var courses =
 
         ],
         "recommendationLevel": 1,
-		"colour": "#ADFF2F"
+        "colour": "#ADFF2F",
+        "room": "MAC A144"
     },
     "ECE 310":
     {
@@ -208,6 +213,7 @@ var courses =
 
         ],
         "recommendationLevel": 0,
-		"colour": "#00CED1"
+        "colour": "#00CED1",
+        "room": "ELW B220"
     }
 }

@@ -1,17 +1,19 @@
 $(function () {
     $("#tabs").tabs();
     //Generate new course section objects
-	csc = new CourseSection("CSC226","A01","Dr.A","9:30-10:20",'MWF');
-	ece310 = new CourseSection("ECE310","A01","Dr.B","10:30-11:50",'MH');
-	seng310 = new CourseSection("SENG310","A01","Dr.C","15:30-16:20",'MH',true);
-	csc2 = new CourseSection("CSC225","A02","Dr.BA","10:30-11:20",'MW');
-	ece320 = new CourseSection("ECE320","A03","Dr.BC","12:30-13:50",'MF');
-    seng320 = new CourseSection("SENG320", "A01", "Dr.CD", "14:30-16:20", 'MH');
+	csc = new CourseSection("CSC 226","A01","Dr.A","9:30-10:20",'MWF','DTB A110');
+	ece310 = new CourseSection("ECE 360","A01","Dr.B","10:30-11:50",'MH','HSD A240');
+	seng310 = new CourseSection("SENG 310","A01","Dr.C","15:30-16:20",'MH','MAC A144',true);
+	csc2 = new CourseSection("CSC 305","A02","Dr.BA","10:30-11:20",'MW','ECS 123');
+	ece320 = new CourseSection("ECE 310","A03","Dr.BC","12:30-13:50",'MF','ELW B220');
+    seng320 = new CourseSection("SENG 365", "A01", "Dr.CD", "14:30-16:20", 'MH','ELL 168');
     //Generate a static list of courses for terms 2 and 3
 	term3courses = [csc,ece310,seng310];
 	term2courses = [csc2,ece320,seng320];
-    tab3Table = createCourseTable(term3courses,"Term3");
-    tab2Table = createCourseTable(term2courses, "Term2");
+	tab3Table = createCourseTable(term3courses,"Term3");
+	tab3Table += createCourseOptionsTable(term3courses, "Term3");
+	tab2Table = createCourseTable(term2courses, "Term2");
+	tab2Table += createCourseOptionsTable(term2courses, "Term2");
     //For term 1, start off with an empty table
     tabEmptyTable = createCourseTable([], "Term1");
     tabEmptyTable += createCourseOptionsTable([], "Term1");
@@ -35,7 +37,7 @@ $(function () {
 			courseFromSave = courseFromSave.sections[0];
 			courseFromSave["name"] = event.target.innerText;
 			currentClasses.push(event.target.innerText);
-			var course = new CourseSection(courseFromSave.name, courseFromSave.section, courseFromSave.prof, courseFromSave.duration, courseFromSave.days, courseFromSave.registered,courseFromSave.recommendationLevel);
+			var course = new CourseSection(courseFromSave.name, courseFromSave.section, courseFromSave.prof, courseFromSave.duration, courseFromSave.days, courseFromSave.room, courseFromSave.registered,courseFromSave.recommendationLevel);
             currentSections.push(course);
             //generateTab(currentSections,"Term1",cur)
 
@@ -54,26 +56,31 @@ $(function () {
 		var courseName = $(parentRow).parent().find('.courseName').text();
 		var sectionReg = /A0([0-9])/;
 		var sectionNum = sectionReg.exec(sectionName)[1]-1;
-
+		console.log(courseName);
 		for(var index in currentSections)
 		{
 			if(currentSections[index].name == courseName)
 			{
+				console.log("true");
 				var courseFromSave = courses[courseName].sections[sectionNum];
 				courseFromSave["name"] = courseName;
-				var course = new CourseSection(courseFromSave.name, courseFromSave.section, courseFromSave.prof, courseFromSave.duration, courseFromSave.days, courseFromSave.registered,courseFromSave.recommendationLevel);
+				var course = new CourseSection(courseFromSave.name, courseFromSave.section, courseFromSave.prof, courseFromSave.duration, courseFromSave.days, courseFromSave.room, courseFromSave.registered,courseFromSave.recommendationLevel);
 				currentSections[index] = course;
 				break;
 			}
 		}
+
         tabTable = createCourseTable(currentSections, "Term1");
         tabTable += createCourseOptionsTable(currentSections, "Term1");
 		$('#tabs-1').html(tabTable);
 		document.getElementById('selectedCourses').innerHTML += createSelectedCoursesSidebar(currentSections);
+	})
+	$('.Auto-Generate').on('click', function (event)
+    {
+        $('#tabs-1').html(tab3Table)
     })
 }
 );
-
 tab1CoursesShown = false;
 tab1CoursesHidden = false;
 class Course
@@ -86,7 +93,7 @@ class Course
 }
 class CourseSection 
 {
-	constructor(name,sectionNumber,prof,duration,days,registered=false,recommendationLevel=0) {
+	constructor(name,sectionNumber,prof,duration,days,room,registered=false,recommendationLevel=0) {
 		this.name = name;
 		this.section = sectionNumber;
 		this.prof = prof;
@@ -95,6 +102,7 @@ class CourseSection
 		this.startTime = timePeriod[0];
 		this.endTime = timePeriod[1];
 		this.days = daysToArray(days);
+		this.room = room;
 		this.registered = registered;
 		this.recommendationLevel = this.recommendationLevel;
 	}
@@ -103,7 +111,7 @@ class CourseSection
 function createCourseTable(classes,termName)
 {
 	//Base HTML for table
-	var tableHTML = `
+	var tableHTML = `<b>Registration Date:</b> 14:30:00 Jun 28<br />
 	<table id='timetable'>
 			<tr>
 				<th></th>
@@ -142,18 +150,27 @@ function createCourseTable(classes,termName)
             for (var index in classes) {
                 //If a course starts at this half hour chunk, then for each day that it occurs, change the column to be that course
                 if (classes[index].startTime == halfHour) {
-                    var rowSpan = classes[index].endTime - classes[index].startTime;
+					var rowSpan = classes[index].endTime - classes[index].startTime;
+					rowCount++;
                     for (ind in classes[index].days) {
-                        cellsChanged = true;
-                        cells[classes[index].days[ind]] = "<td rowspan = " + rowSpan + (classes[index].registered ? " style='background-color:#CCC'" : '') + ">" + classes[index].name + "<br />" + classes[index].timePeriod + "</td>";
-                        rowCount++;
+						cellsChanged = true;
+						cells[classes[index].days[ind]] = "<td rowspan = "
+						 + rowSpan 
+						 + (classes[index].registered ? " style='background-color:#CCC'" : (" style='background-color:"+courses[classes[index].name].colour+"'")) + ">" 
+						 + classes[index].name + " " + classes[index].section
+						 + "<br />" 
+						 + classes[index].timePeriod
+						 + "</td>";
+
                     }
                 }
                 //If the course <td> has already been created, make sure another one isn't created in the same timeslot
                 else if (classes[index].startTime < halfHour && classes[index].endTime > halfHour) {
+					rowCount++;
                     for (ind in classes[index].days) {
                         cellsChanged = true;
-                        cells[classes[index].days[ind]] = "";
+						cells[classes[index].days[ind]] = "";
+
                     }
                 }
             }
@@ -177,10 +194,10 @@ function createCourseTable(classes,termName)
 						<td class='fakeButton' colspan=2>
 							Save
 						</td>
-						<td class='fakeButton' colspan=2>
+						<td class='button Auto-Generate' colspan=2>
 							Auto-Generate
 						</td>
-						<td class='fakeButton' colspan=2>
+						<td class='fakeButton' colspan=2 title='Registration not available yet. Registration Date: 14:30:00 Jun 28'>
 							Register
 						</td>
 				  </tr>`;
@@ -273,7 +290,12 @@ function createSelectedCoursesSidebar (selectedCourses)
 	for(var i in selectedCourses) {
 		var sections = courses[selectedCourses[i]["name"]]["sections"];
 		sidebarHTML += "<table>";
-		sidebarHTML += "<tr><th colspan=3 class='courseName'>"+selectedCourses[i]["name"]+"</th></tr>";
+		sidebarHTML += "<tr><th colspan=3 class='courseName'>"
+					+ selectedCourses[i]["name"]
+					+ "</th>"
+					+ "<th>" + courses[selectedCourses[i]["name"]].room + "</th>"
+					+ "<th>"
+					+ "<div style='display:inline-block;background-color:red;border:1px solid black;border-radius: 100%;padding-left:5px;padding-right:5px;margin-left:5px' class='dropCourse'>drop</div></th></tr>";
         for (var index in sections) {
             sidebarHTML += "<tr>";
             sidebarHTML += "<td class='noBorder' style='width:3%'><input type='radio' name='sections_" + selectedCourses[i]["name"].replace(/\s/g, '') + "' " + (selectedCourses[i]["section"]==sections[index]["section"] ? "checked" : "") + "></td>" + "<td class='noBorder sectionName'>" + sections[index]["section"] + "</td>";
