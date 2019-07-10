@@ -154,7 +154,22 @@ function createCourseTable(classes,termName)
 
 						if(curSections[dayNum] !== "" && curSections[dayNum][1] == halfHour && curSections[dayNum][0].name != classes[index].name)
 						{
-							cells[dayNum] = "<td class='noBorder'>" + curSections[dayNum][0].name + "<br /> conflicts with  <br />"  + classes[index].name  + "</td>";
+							var classObj = curSections[dayNum][0];
+							var classObj2 = classes[index];
+							cells[dayNum] = "<td class='noBorder'>"
+							+ "<div style='border-radius: 10px;height:100%;display:inline-block;"
+							+ (classObj.registered ? " background-color:#CCC" : (" background-color:"+courses[classObj.name].colour)) + "'>" 
+							+ classObj.name + " " + classObj.section
+							+ "<br />" 
+							+ classObj.timePeriod
+							+ "</div>"
+							+ "<div style='border-radius: 10px;height:100%;display:inline-block;"
+							+ (classObj2.registered ? " background-color:#CCC" : (" background-color:"+courses[classObj2.name].colour)) + "'>" 
+							+ classObj2.name + " " + classObj2.section
+							+ "<br />" 
+							+ classObj2.timePeriod
+							+ "</div>"
+							+"</td>";
 							console.log(curSections[dayNum][0].name + " "  + classes[index].name)
 						}
 						else
