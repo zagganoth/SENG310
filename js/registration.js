@@ -30,12 +30,12 @@ $(function () {
     $('body').on('click', '.addCourse', function (event) {
         //The .courseName div from the clicked object contains the name of the course selected
         //Thus, we can get information about the course by searching the 'courses' dictionary in courses.js for that course
-        var courseFromSave = courses[$(event.target).find('.courseName').prevObject.text()]
+        var courseFromSave = courses[$(event.target).parent().find('.courseName').text()]
         //Only allow for selection of a course if it has recommendationLevel 2 (green - no prereqs or coreqs missing)
 		if(courseFromSave.recommendationLevel == 2)
 		{
 			courseFromSave = courseFromSave.sections[0];
-			courseFromSave["name"] = event.target.innerText;
+			courseFromSave["name"] = $(event.target).parent().find('.courseName').text();
 			currentClasses.push(event.target.innerText);
 			var course = new CourseSection(courseFromSave.name, courseFromSave.section, courseFromSave.prof, courseFromSave.duration, courseFromSave.days, courseFromSave.room, courseFromSave.registered,courseFromSave.recommendationLevel);
             currentSections.push(course);
