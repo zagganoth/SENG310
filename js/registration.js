@@ -113,11 +113,11 @@ function createCourseTable(classes,termName)
 	<table id='timetable'>
 			<tr>
 				<th></th>
-				<th>Monday</th>
-				<th>Tuesday</th>
-				<th>Wednesay</th>
-				<th>Thursday</th>
-				<th>Friday</th>
+				<th style='width:18%'>Monday</th>
+				<th style='width:18%'>Tuesday</th>
+				<th style='width:18%'>Wednesay</th>
+				<th style='width:18%'>Thursday</th>
+				<th style='width:18%'>Friday</th>
 			</tr>
 	`;
 	if (classes.length == 0) 
@@ -153,17 +153,18 @@ function createCourseTable(classes,termName)
 						var dayNum = classes[index].days[ind] + 2;
 
 						if(curSections[dayNum] !== "" && curSections[dayNum][1] == halfHour && curSections[dayNum][0].name != classes[index].name)
-						{
+                        {
+                            //Create a table cell depicting two conflicting courses
 							var classObj = curSections[dayNum][0];
 							var classObj2 = classes[index];
 							cells[dayNum] = "<td class='noBorder'>"
-							+ "<div style='border-radius: 10px;height:100%;display:inline-block;"
+							+ "<div style='border-radius: 10px;height:100%;display:inline-block;width:50%;"
 							+ (classObj.registered ? " background-color:#CCC" : (" background-color:"+courses[classObj.name].colour)) + "'>" 
 							+ classObj.name + " " + classObj.section
 							+ "<br />" 
 							+ classObj.timePeriod
 							+ "</div>"
-							+ "<div style='border-radius: 10px;height:100%;display:inline-block;"
+							+ "<div style='border-radius: 10px;height:100%;display:inline-block;width:50%;"
 							+ (classObj2.registered ? " background-color:#CCC" : (" background-color:"+courses[classObj2.name].colour)) + "'>" 
 							+ classObj2.name + " " + classObj2.section
 							+ "<br />" 
