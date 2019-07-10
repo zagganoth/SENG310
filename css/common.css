@@ -1,8 +1,7 @@
 #container {
-	height: 800px;
 	/* Set to match the space within the MyPage "border" images. */
 	width: 1335px;
-	background-color: #EEE;
+	background-color: white;
 	position: absolute;
 	margin-left: 230px;
 	padding: 0px;
@@ -10,6 +9,10 @@
 
 .courses {
 	background-color: #FFF
+}
+
+#tabs {
+	height: 675px;
 }
 
 #timetable {
