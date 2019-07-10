@@ -56,12 +56,10 @@ $(function () {
 		var courseName = $(parentRow).parent().find('.courseName').text();
 		var sectionReg = /A0([0-9])/;
 		var sectionNum = sectionReg.exec(sectionName)[1]-1;
-		console.log(courseName);
 		for(var index in currentSections)
 		{
 			if(currentSections[index].name == courseName)
 			{
-				console.log("true");
 				var courseFromSave = courses[courseName].sections[sectionNum];
 				courseFromSave["name"] = courseName;
 				var course = new CourseSection(courseFromSave.name, courseFromSave.section, courseFromSave.prof, courseFromSave.duration, courseFromSave.days, courseFromSave.room, courseFromSave.registered,courseFromSave.recommendationLevel);
@@ -139,51 +137,56 @@ function createCourseTable(classes,termName)
                 last = classes[i].endTime;
             }
         }
-        var rowCount = 0;
+		var curSections = ["","","","","","","",""];
+		var tableArray = [];
         //For each possible time slot, check if a course is occuring during that timeslot
         for (var halfHour = first; halfHour < last; halfHour++) {
-            tableHTML += "<tr>";
-            var remainingDays = 6;
-            var cellsChanged = false;
             //By default assume the table row is empty
-            var cells = ["<td></td>", "<td></td>", "<td></td>", "<td></td>", '<td></td>'];
+			var cells = ["<tr>","<td class='noBorder'>" + (Math.floor(halfHour / 2) + 8) + (halfHour % 2 == 0 ? ":00" : ":30") + "</td>","<td class='noBorder'></td>", "<td class='noBorder'></td>", "<td class='noBorder'></td>", "<td class='noBorder'></td>", "<td class='noBorder'></td>","</tr>"];
+
             for (var index in classes) {
-                //If a course starts at this half hour chunk, then for each day that it occurs, change the column to be that course
+				//If a course starts at this half hour chunk, then for each day that it occurs, change the column to be that course
                 if (classes[index].startTime == halfHour) {
 					var rowSpan = classes[index].endTime - classes[index].startTime;
-					rowCount++;
+					//For each day this class runs, create a table cell for it
                     for (ind in classes[index].days) {
-						cellsChanged = true;
-						cells[classes[index].days[ind]] = "<td rowspan = "
-						 + rowSpan 
-						 + (classes[index].registered ? " style='background-color:#CCC'" : (" style='background-color:"+courses[classes[index].name].colour+"'")) + ">" 
-						 + classes[index].name + " " + classes[index].section
-						 + "<br />" 
-						 + classes[index].timePeriod
-						 + "</td>";
+						var dayNum = classes[index].days[ind] + 2;
 
+						if(curSections[dayNum] !== "" && curSections[dayNum][1] == halfHour && curSections[dayNum][0].name != classes[index].name)
+						{
+							cells[dayNum] = "<td class='noBorder'>" + curSections[dayNum][0].name + "<br /> conflicts with  <br />"  + classes[index].name  + "</td>";
+							console.log(curSections[dayNum][0].name + " "  + classes[index].name)
+						}
+						else
+						{
+							cells[dayNum] = generateScheduleCell(classes[index],rowSpan);
+						}
+						curSections[dayNum] = [classes[index],halfHour];
                     }
                 }
                 //If the course <td> has already been created, make sure another one isn't created in the same timeslot
                 else if (classes[index].startTime < halfHour && classes[index].endTime > halfHour) {
-					rowCount++;
                     for (ind in classes[index].days) {
-                        cellsChanged = true;
-						cells[classes[index].days[ind]] = "";
-
+						var dayNum = classes[index].days[ind] + 2;
+						cells[dayNum] = "";
                     }
                 }
-            }
+			}
 
-            tableHTML += "<td>" + (Math.floor(halfHour / 2) + 8) + (halfHour % 2 == 0 ? ":00" : ":30") + "</td>" + cells.join('');
-
-
-            tableHTML += "</tr>";
-        }
-        if (rowCount < 17) {
-            var cells = ["<td></td>", "<td></td>", "<td></td>", "<td></td>", '<td></td>'];
-            for (var halfHour = rowCount; halfHour < 17; halfHour++) {
-                tableHTML += "<tr><td>" + (Math.floor(halfHour / 2) + 8) + (halfHour % 2 == 0 ? ":00" : ":30") + "</td>" + cells.join('')+"</tr>";
+			tableArray.push(cells);
+		}
+		//Concatenate the finished table
+		for(var row in tableArray)
+		{
+			tableHTML += tableArray[row].join('');
+		}
+		//console.log(termName,tableArray);
+		//Add extra rows at end to match width of sidebar
+        if ((last-first) < 17) {
+            var cells = ["<td class='noBorder'></td>", "<td class='noBorder'></td>", "<td class='noBorder'></td>", "<td class='noBorder'></td>", "<td class='noBorder'></td>"];
+            for (var halfHour = (last-first); halfHour < 17; halfHour++) {
+				var timeMarker = halfHour + first
+                tableHTML += "<tr><td class='noBorder'>" + (Math.floor(timeMarker / 2) + 8) + (timeMarker % 2 == 0 ? ":00" : ":30") + "</td>" + cells.join('')+"</tr>";
             }
 
         }
@@ -202,20 +205,20 @@ function createCourseTable(classes,termName)
 						</td>
 				  </tr>`;
     tableHTML += "</table>";
-    /*
-    tableHTML += `<table width='250px'>
-                    <tr>
-                        <th>Selected classes</th>
-                    </tr>
-                    <tr>
-                        <td rowspan = 30 id='selectedclasses' style='vertical-align:top; float:left; width:100%; height:500px;'>
-                            <div id='courseOptions_` + termName + `'>
-                                <input class='termSearch' style='margin-top:5px;border-radius:9px;width:100%;border:1px solid grey;padding:2px' placeholder='Search' onclick='showclasses("` + termName + `",` + JSON.stringify(classes) + `)'></input>
-                            </div>
-                        </td>
-                    </tr>
-				  </table>`;*/
     return tableHTML;
+}
+function generateScheduleCell(classObj,rowSpan)
+{
+		retVar= "<td class='noBorder' rowspan = "
+		 + rowSpan 
+		 + "><div style='border-radius: 10px;height:100%;"
+		 + (classObj.registered ? " background-color:#CCC" : (" background-color:"+courses[classObj.name].colour)) + "'>" 
+		 + classObj.name + " " + classObj.section
+		 + "<br />" 
+		 + classObj.timePeriod
+		 + "</div></td>";
+
+	return retVar;
 }
 function createCourseOptionsTable(courses,termName)
 {
@@ -232,7 +235,19 @@ function createCourseOptionsTable(courses,termName)
                     </tr>
 				  </table>`;
 }
-
+function conflictDetector(startTime1,endTime1,startTime2,endTime2)
+{
+	//If start2 is between start1 and end1, there is a conflict
+	if(startTime2 > startTime1 && startTime2 < endTime1)
+	{
+		return [endTime1-startTime2,endTime1];
+	}
+	//If start1 is between start2 and end2, there is a conflict
+	else if(startTime1 > startTime2 && startTime1 < endTime2)
+	{
+		return [endTime2-startTime1,endTime2];
+	}
+}
 // Generates the list of courses that can be added when the cursor is in the search field.
 function showCourses(term,selectedCourses) {
     if (!tab1CoursesShown)
