@@ -23,12 +23,13 @@
 }
 
 #selectedCoursesTable {
-	width: 30%;
+	border-collapse: collapse;
 }
 
 td {
-	border: 1px solid black;
 	margin: 0px;
+	padding: 3px;
+	border: 1px solid black;
 	border-spacing: 0px;
 	height: 30px;
 }

@@ -5,21 +5,21 @@ var courses =
         "sections": [
             {
                 "section": "A01",
-                "prof": "Dr. A",
+                "prof": "Dr. Tianming Wei",
                 "duration": "9:30-10:20",
                 "days": "MWF",
                 "registered": false,
             },
             {
                 "section": "A02",
-                "prof": "Dr. B",
+                "prof": "Dr. Tianming Wei",
                 "duration": "10:30-11:20",
                 "days": "MWF",
                 "registered": false,
             },
             {
                 "section": "A03",
-                "prof": "Dr. C",
+                "prof": "Dr. Richard Little",
                 "duration": "15:30-16:50",
                 "days": "MH",
                 "registered": false,
@@ -40,7 +40,7 @@ var courses =
         "sections": [
             {
                 "section": "A01",
-                "prof": "Dr. Dq",
+                "prof": "Dr. Michael Adams",
                 "duration": "11:30-12:20",
                 "days": "MTF",
                 "registered": false,
@@ -48,7 +48,7 @@ var courses =
             },
             {
                 "section": "A02",
-                "prof": "Dr. Bq",
+                "prof": "Dr. Ilamparithi Chelvan",
                 "duration": "13:00-13:50",
                 "days": "MWF",
                 "registered": false,
@@ -56,7 +56,7 @@ var courses =
             },
             {
                 "section": "A03",
-                "prof": "Dr. Aq",
+                "prof": "Dr. Panajotis Agathoklis",
                 "duration": "9:30-10:20",
                 "days": "MHF",
                 "registered": false,
@@ -77,7 +77,7 @@ var courses =
         "sections": [
             {
                 "section": "A01",
-                "prof": "Dr. Ab",
+                "prof": "Dr. John Smith",
                 "duration": "12:30-14:20",
                 "days": "MTF",
                 "registered": false,
@@ -85,7 +85,7 @@ var courses =
             },
             {
                 "section": "A02",
-                "prof": "Dr. Dc",
+                "prof": "Dr. John Smith",
                 "duration": "14:00-15:50",
                 "days": "MWF",
                 "registered": false,
@@ -93,7 +93,7 @@ var courses =
             },
             {
                 "section": "A03",
-                "prof": "Dr. Ao",
+                "prof": "Dr. John Smith",
                 "duration": "9:30-10:50",
                 "days": "MHF",
                 "registered": false,
@@ -114,21 +114,21 @@ var courses =
         "sections": [
             {
                 "section": "A01",
-                "prof": "Dr. Ed",
+                "prof": "Dr. Li Ji",
                 "duration": "12:30-13:20",
                 "days": "TWF",
                 "registered": false,
             },
             {
                 "section": "A02",
-                "prof": "Dr. Foo",
+                "prof": "Dr. Li Ji",
                 "duration": "11:30-12:20",
                 "days": "TWF",
                 "registered": false,
             },
             {
                 "section": "A03",
-                "prof": "Dr. Gar",
+                "prof": "Dr. Li Ji",
                 "duration": "13:30-14:20",
                 "days": "TWF",
                 "registered": false,
@@ -149,21 +149,21 @@ var courses =
         "sections": [
             {
                 "section": "A01",
-                "prof": "Dr. E",
+                "prof": "Dr. Charles Perin",
                 "duration": "15:30-16:20",
                 "days": "TWF",
                 "registered": true,
             },
             {
                 "section": "A02",
-                "prof": "Dr. F",
+                "prof": "Dr. Charles Perin",
                 "duration": "10:30-11:20",
                 "days": "TWF",
                 "registered": false,
             },
             {
                 "section": "A03",
-                "prof": "Dr. G",
+                "prof": "Dr. Charles Perin",
                 "duration": "12:30-13:20",
                 "days": "TWF",
                 "registered": false,
@@ -184,7 +184,7 @@ var courses =
         "sections": [
             {
                 "section": "A01",
-                "prof": "Dr. D",
+                "prof": "Dr. Fayez Gebali",
                 "duration": "10:30-12:20",
                 "days": "MH",
                 "registered": false,
@@ -192,7 +192,7 @@ var courses =
             },
             {
                 "section": "A02",
-                "prof": "Dr. D",
+                "prof": "Dr. Fayez Gebali",
                 "duration": "12:30-14:20",
                 "days": "MH",
                 "registered": false,
@@ -200,7 +200,7 @@ var courses =
             },
             {
                 "section": "A03",
-                "prof": "Dr. A",
+                "prof": "Dr. Fayez Gebali",
                 "duration": "8:30-10:20",
                 "days": "MH",
                 "registered": false,

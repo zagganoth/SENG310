@@ -1,12 +1,12 @@
 $(function () {
     $("#tabs").tabs();
     //Generate new course section objects
-	csc = new CourseSection("CSC 226","A01","Dr.A","9:30-10:20",'MWF','DTB A110');
-	ece310 = new CourseSection("ECE 360","A01","Dr.B","10:30-11:50",'MH','HSD A240');
-	seng310 = new CourseSection("SENG 310","A01","Dr.C","15:30-16:20",'MH','MAC A144',true);
-	csc2 = new CourseSection("CSC 305","A02","Dr.BA","10:30-11:20",'MW','ECS 123');
-	ece320 = new CourseSection("ECE 310","A03","Dr.BC","12:30-13:50",'MF','ELW B220');
-    seng320 = new CourseSection("SENG 365", "A01", "Dr.CD", "14:30-16:20", 'MH','ELL 168');
+	csc = new CourseSection("CSC 226","A01","Dr. Tianming Wei","9:30-10:20",'MWF','DTB A110');
+	ece310 = new CourseSection("ECE 360","A01","Dr. Michael Adams","10:30-11:50",'MH','HSD A240');
+	seng310 = new CourseSection("SENG 310","A01","Dr. Charles Perin","15:30-16:20",'MH','MAC A144',true);
+	csc2 = new CourseSection("CSC 305","A02","Dr. Li Ji","10:30-11:20",'MW','ECS 123');
+	ece320 = new CourseSection("ECE 310","A03","Dr. Michael Adams","12:30-13:50",'MF','ELW B220');
+    seng320 = new CourseSection("SENG 365", "A01", "Dr. John Smith", "14:30-16:20", 'MH','ELL 168');
     //Generate a static list of courses for terms 2 and 3
 	term3courses = [csc,ece310,seng310];
 	term2courses = [csc2,ece320,seng320];
@@ -196,7 +196,6 @@ function createCourseTable(classes,termName)
 		{
 			tableHTML += tableArray[row].join('');
 		}
-		//console.log(termName,tableArray);
 		//Add extra rows at end to match width of sidebar
         if ((last-first) < 17) {
             var cells = ["<td class='noBorder'></td>", "<td class='noBorder'></td>", "<td class='noBorder'></td>", "<td class='noBorder'></td>", "<td class='noBorder'></td>"];
@@ -320,7 +319,7 @@ function createSelectedCoursesSidebar (selectedCourses)
 	var sidebarHTML = ``;
 	for(var i in selectedCourses) {
 		var sections = courses[selectedCourses[i]["name"]]["sections"];
-		sidebarHTML += "<table>";
+		sidebarHTML += "<table id='selectedCoursesTable'>";
 		sidebarHTML += "<tr><th colspan=3 class='courseName'>"
 					+ selectedCourses[i]["name"]
 					+ "</th>"
@@ -329,10 +328,10 @@ function createSelectedCoursesSidebar (selectedCourses)
 					+ "<div style='display:inline-block;background-color:red;border:1px solid black;border-radius: 100%;padding-left:5px;padding-right:5px;margin-left:5px' class='dropCourse'>drop</div></th></tr>";
         for (var index in sections) {
             sidebarHTML += "<tr>";
-            sidebarHTML += "<td class='noBorder' style='width:3%'><input type='radio' name='sections_" + selectedCourses[i]["name"].replace(/\s/g, '') + "' " + (selectedCourses[i]["section"]==sections[index]["section"] ? "checked" : "") + "></td>" + "<td class='noBorder sectionName'>" + sections[index]["section"] + "</td>";
-			sidebarHTML += "<td class='noBorder'>"+sections[index]["prof"]+"</td>";
-			sidebarHTML += "<td class='noBorder'>"+sections[index]["duration"]+"</td>";
-			sidebarHTML += "<td class='noBorder'>"+sections[index]["days"]+"</td>";
+            sidebarHTML += "<td class='noBorder' style='width:3%'><input type='radio' name='sections_" + selectedCourses[i]["name"].replace(/\s/g, '') + "' " + (selectedCourses[i]["section"]==sections[index]["section"] ? "checked" : "") + "></td>" + "<td class='sectionName'>" + sections[index]["section"] + "</td>";
+			sidebarHTML += "<td>"+sections[index]["prof"]+"</td>";
+			sidebarHTML += "<td>"+sections[index]["duration"]+"</td>";
+			sidebarHTML += "<td>"+sections[index]["days"]+"</td>";
 			sidebarHTML += "</tr>";
 		}
 		sidebarHTML += "</table>";
