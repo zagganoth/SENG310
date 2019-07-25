@@ -122,7 +122,7 @@ function createCourseTable(classes,termName)
 	`;
 	if (classes.length == 0) 
 	{
-        tableHTML += "<tr><td colspan=6 style='height:500px'>Add some classes to begin</td></tr>";
+        tableHTML += "<tr><td colspan=6 style='height:500px'>Your timetable will appear here. Use the search box to find classes to add.</td></tr>";
     }
 	else 
 	{
@@ -244,7 +244,7 @@ function createCourseOptionsTable(courses,termName)
                     <tr>
                         <td rowspan = 30 id='selectedCourses' style='vertical-align:top; float:left; width:100%; height:500px;overflow:auto'>
                             <div id='courseOptions_` + termName + `'>
-                                <input class='termSearch' style='margin-top:5px;border-radius:9px;width:100%;border:1px solid grey;padding:2px' placeholder='Search' onclick='showCourses("` + termName + `",` + JSON.stringify(courses) + `)'></input>
+                                <input class='termSearch' style='margin-top:5px;border-radius:9px;width:100%;border:1px solid grey;padding:2px' placeholder='Search for a new class...' onclick='showCourses("` + termName + `",` + JSON.stringify(courses) + `)'></input>
                             </div>
                         </td>
                     </tr>
